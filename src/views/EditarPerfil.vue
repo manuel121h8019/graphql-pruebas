@@ -1,18 +1,21 @@
+// eslint-disable-next-line
 <template>
   <div>
     <h1>Editar</h1>
-    <ApolloQuery 
-    :query="require('@/graphql/getPerfil.gql')"
-    :variables="{id: this.$route.params.id}"     
+    <!--   <ApolloQuery
+      :query="require('@/graphql/getPerfil.gql')"
+      :variables="{ id: this.$route.params.id }"
     >
       <template v-slot="{ result: { loading, error, data } }">
         <div v-if="loading" class="loading apollo">Loading..</div>
         <div v-if="error" class="error apollo">A ocurrido un error..</div>
-        <div v-for="gusto in data.gustos" :key="gusto.id">
-          {{gusto.perfile.name}}--{{gusto.comida}}--{{gusto.bebida}}
+
+        <div v-for="gusto in data.gustos" :key="gusto.id" >
+          {{ gusto.perfile.name }}--{{ gusto.comida }}--{{ gusto.bebida }}
         </div>
       </template>
-    </ApolloQuery>
+    </ApolloQuery> -->
+  
     <v-col cols="4" class="margin-auto">
       <v-col cols="12" sm="12" md="12">
         <v-text-field
@@ -38,7 +41,7 @@
           placeholder=" "
         ></v-text-field>
       </v-col>
-      <v-btn small @click="updatePerfil">Guardar </v-btn>
+      <v-btn @click="updatePerfil">Guardar</v-btn>
     </v-col>
   </div>
 </template>
@@ -48,7 +51,7 @@ export default {
     return {
       gustos: [],
       id: null,
-      name: "",
+      name: null,
       comida: "",
       bebida: ""
     };
@@ -57,7 +60,7 @@ export default {
     this.select();
   },
   methods: {
-    /* select() {
+    select() {
       this.id = this.$route.params.id;
       this.$apollo.query({
         query: require("@/graphql/getPerfil.gql"),
@@ -68,7 +71,7 @@ export default {
           this.gustos = data.gustos;
         }
       });
-    }, */
+    },
     updatePerfil() {
       this.$apollo.mutate({
         mutation: require("../graphql/updatePerfiles.gql"),

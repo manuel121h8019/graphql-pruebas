@@ -1,5 +1,8 @@
-query fethcPerfil($id: Int) {
-  gustos(order_by: { id: asc }, where: { perfil_id: { _eq: $id } }) {
+query fethcPerfil($id: Int, $estado: Boolean) {
+  gustos(
+    order_by: { id: asc }
+    where: { perfil_id: { _eq: $id }, delete_at: { _is_null: $estado } }
+  ) {
     bebida
     comida
     id
@@ -8,5 +11,6 @@ query fethcPerfil($id: Int) {
       name
       id
     }
+    delete_at
   }
 }

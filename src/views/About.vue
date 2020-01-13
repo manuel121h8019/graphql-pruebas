@@ -1,7 +1,10 @@
 <template>
   <div class="about">
     <h1>Ejemplo de grqphql</h1>
-    <ApolloQuery :query="require('@/graphql/getPerfil.gql')">
+    <ApolloQuery
+      :query="require('@/graphql/getPerfil.gql')"
+      :variables="{ estado: estado }"
+    >
       <template v-slot="{ result: { loading, error, data } }">
         <!-- Loading -->
         <div v-if="loading" class="loading apollo">Loading...</div>
@@ -11,6 +14,26 @@
 
         <!-- Result -->
         <div v-else-if="data" class="result apollo">
+              <v-toolbar-items class="hidden-sm-and-down">
+                <template>
+                  <v-container fluid>
+                    <v-row class="light--text">
+                      <v-radio-group v-model="estado" row>
+                        <v-radio
+                          label="Activos"
+                          color="light-blue darken-1"
+                          :value="true"
+                        ></v-radio>
+                        <v-radio
+                          label="Papelera"
+                          color="light-blue darken-1"
+                          :value="false"
+                        ></v-radio>
+                      </v-radio-group>
+                    </v-row>
+                  </v-container>
+                </template>
+              </v-toolbar-items>
           <v-data-table
             :loading="loading"
             :headers="headers"
@@ -21,6 +44,7 @@
             <template v-slot:top> </template>
             <template v-slot:item.action="{ item }">
               <v-btn
+              v-if="estado==true"
                 small
                 class="mr-2"
                 style="color:teal"
@@ -28,8 +52,11 @@
               >
                 edit
               </v-btn>
-              <v-btn small @click="deleteP(item.perfil_id)">
+              <v-btn v-if="estado==true" small @click="deleteP(item.perfil_id)">
                 delete
+              </v-btn>
+              <v-btn v-if="estado==false" small @click="activar(item.perfil_id)">
+                Activar
               </v-btn>
             </template>
           </v-data-table>
@@ -40,11 +67,13 @@
     </ApolloQuery>
   </div>
 </template>
-
 <script>
 export default {
   data() {
     return {
+      estado: true,
+      activ: null,
+      date: new Date().toISOString().substr(),
       loading: false,
       headers: [
         {
@@ -66,11 +95,22 @@ export default {
       this.$router.push({ name: "edit", params: { id } });
     },
     // eslint-disable-next-line no-unused-vars
-    deleteP(id) {
+    deleteP(id, date) {
+      date = this.date;
       this.$apollo.mutate({
         mutation: require("../graphql/deletePerfil.gql"),
         variables: {
-          id: (this.perfil_id = id)
+          id: (this.perfil_id = id),
+          date: this.date
+        }
+      });
+    },
+    activar(id) {
+      this.$apollo.mutate({
+        mutation: require("../graphql/deletePerfil.gql"),
+        variables: {
+          id: (this.perfil_id = id),
+          date: this.activ
         }
       });
     }
