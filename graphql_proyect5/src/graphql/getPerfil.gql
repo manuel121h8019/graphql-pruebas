@@ -1,0 +1,12 @@
+query fethcPerfil($id: Int) {
+  gustos(order_by: { id: asc }, where: { perfil_id: { _eq: $id } }) {
+    bebida
+    comida
+    id
+    perfil_id
+    perfile {
+      name
+      id
+    }
+  }
+}

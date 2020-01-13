@@ -1,0 +1,14 @@
+mutation MyMutation($id: Int) {
+  __typename
+  delete_gustos(where: { perfil_id: { _eq: $id } }) {
+    affected_rows
+    returning {
+      comida
+    }
+  }
+  delete_perfiles(where: { id: { _eq: $id } }) {
+    returning {
+      name
+    }
+  }
+}

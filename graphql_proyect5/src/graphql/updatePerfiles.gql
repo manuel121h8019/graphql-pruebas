@@ -1,0 +1,26 @@
+mutation updatePerfiles(
+  $id: Int
+  $comida: String
+  $bebida: String
+  $name: String
+) {
+  __typename
+  update_gustos(
+    _set: { bebida: $bebida, comida: $comida }
+    where: { perfil_id: { _eq: $id } }
+  ) {
+    affected_rows
+    returning {
+      id
+      bebida
+      comida
+    }
+  }
+  update_perfiles(where: { id: { _eq: $id } }, _set: { name: $name }) {
+    affected_rows
+    returning {
+      id
+      name
+    }
+  }
+}

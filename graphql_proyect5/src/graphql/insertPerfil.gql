@@ -1,0 +1,18 @@
+mutation insertPerfil($bebida: String, $comida: String, $name: String) {
+  insert_gustos(
+    objects: {
+      bebida: $bebida
+      comida: $comida
+      perfile: { data: { name: $name } }
+    }
+  ) {
+    returning {
+      perfile {
+        id
+        name
+      }
+      bebida
+      comida
+    }
+  }
+}
