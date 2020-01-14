@@ -8,32 +8,31 @@
       <template v-slot="{ result: { loading, error, data } }">
         <!-- Loading -->
         <div v-if="loading" class="loading apollo">Loading...</div>
-
         <!-- Error -->
         <div v-else-if="error" class="error apollo">An error occurred</div>
 
         <!-- Result -->
         <div v-else-if="data" class="result apollo">
-              <v-toolbar-items class="hidden-sm-and-down">
-                <template>
-                  <v-container fluid>
-                    <v-row class="light--text">
-                      <v-radio-group v-model="estado" row>
-                        <v-radio
-                          label="Activos"
-                          color="light-blue darken-1"
-                          :value="true"
-                        ></v-radio>
-                        <v-radio
-                          label="Papelera"
-                          color="light-blue darken-1"
-                          :value="false"
-                        ></v-radio>
-                      </v-radio-group>
-                    </v-row>
-                  </v-container>
-                </template>
-              </v-toolbar-items>
+          <v-toolbar-items class="hidden-sm-and-down">
+            <template>
+              <v-container fluid>
+                <v-row class="light--text">
+                  <v-radio-group v-model="estado" row>
+                    <v-radio
+                      label="Activos"
+                      color="light-blue darken-1"
+                      :value="true"
+                    ></v-radio>
+                    <v-radio
+                      label="Papelera"
+                      color="light-blue darken-1"
+                      :value="false"
+                    ></v-radio>
+                  </v-radio-group>
+                </v-row>
+              </v-container>
+            </template>
+          </v-toolbar-items>
           <v-data-table
             :loading="loading"
             :headers="headers"
@@ -44,7 +43,7 @@
             <template v-slot:top> </template>
             <template v-slot:item.action="{ item }">
               <v-btn
-              v-if="estado==true"
+                v-if="estado == true"
                 small
                 class="mr-2"
                 style="color:teal"
@@ -52,10 +51,18 @@
               >
                 edit
               </v-btn>
-              <v-btn v-if="estado==true" small @click="deleteP(item.perfil_id)">
+              <v-btn
+                v-if="estado == true"
+                small
+                @click="deleteP(item.perfil_id)"
+              >
                 delete
               </v-btn>
-              <v-btn v-if="estado==false" small @click="activar(item.perfil_id)">
+              <v-btn
+                v-if="estado == false"
+                small
+                @click="activar(item.perfil_id)"
+              >
                 Activar
               </v-btn>
             </template>
