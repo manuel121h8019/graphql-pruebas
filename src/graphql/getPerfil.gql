@@ -1,5 +1,6 @@
 query fethcPerfil($id: Int, $estado: Boolean) {
-  gustos(order_by: { id: asc }
+  gustos(
+    order_by: { id: asc }
     where: { perfil_id: { _eq: $id }, delete_at: { _is_null: $estado } }
   ) {
     perfile {
@@ -8,8 +9,9 @@ query fethcPerfil($id: Int, $estado: Boolean) {
     }
     bebida
     comida
+    precio
     id
-    perfil_id    
+    perfil_id
     delete_at
   }
 }

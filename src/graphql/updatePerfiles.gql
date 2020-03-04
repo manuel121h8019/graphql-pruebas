@@ -3,10 +3,11 @@ mutation updatePerfiles(
   $comida: String
   $bebida: String
   $name: String
+  $precio: money
 ) {
   __typename
   update_gustos(
-    _set: { bebida: $bebida, comida: $comida }
+    _set: { bebida: $bebida, comida: $comida, precio: $precio }
     where: { perfil_id: { _eq: $id } }
   ) {
     affected_rows
@@ -14,6 +15,7 @@ mutation updatePerfiles(
       id
       bebida
       comida
+      precio
     }
   }
   update_perfiles(where: { id: { _eq: $id } }, _set: { name: $name }) {

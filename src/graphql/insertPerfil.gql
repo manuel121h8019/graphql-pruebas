@@ -1,7 +1,13 @@
-mutation insertPerfil($bebida: String, $comida: String, $name: String) {
+mutation insertPerfil(
+  $bebida: String
+  $comida: String
+  $name: String
+  $precio: money
+) {
   insert_gustos(
     objects: {
       bebida: $bebida
+      precio: $precio
       comida: $comida
       perfile: { data: { name: $name } }
     }

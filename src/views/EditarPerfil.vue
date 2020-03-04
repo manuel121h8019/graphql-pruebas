@@ -1,42 +1,13 @@
 <template>
   <div class="edit">
     <h1>Editar perfil</h1>
-    <ApolloQuery
-      :query="require('@/graphql/getPerfil.gql')"
-      :variables="{ id: this.$route.params.id }"
-    >
-      <template v-slot="{ result: { loading, error, data } }">
-        <!-- Loading -->
-        <div v-if="loading" class="loading apollo">Loading...</div>
-        <!-- Error -->
-        <div v-else-if="error" class="error apollo">An error occurred</div>
-
-        <!-- Result -->
-        <div v-else-if="data" class="result apollo">
-          <div v-for="gusto in data.gustos" :key="gusto.id">
-            {{ gusto.comida }}
-          </div>
-        </div>
-        <!-- No result -->
-        <div v-else class="no-result apollo">No result :(</div>
-      </template>
-    </ApolloQuery>
-    <ApolloMutation
-      :mutation="require('../graphql/updatePerfiles.gql')"
-      :variables="{
-        id: this.$route.params.id,
-        name: input.name,
-        comida: input.comida,
-        bebida: input.bebida
-      }"
-      @done="onDone"
-    >
-      <template slot-scope="{ mutate, loading, error }">
-        <form>
+    <!-- <v-card>
+      <form>
+        <div v-for="gusto in gustos" :key="gusto.id">
           <v-col cols="4" class="margin-auto">
             <v-col cols="12" sm="12" md="12">
               <v-text-field
-                v-model="input.name"
+                v-model="gusto.perfile.name"
                 color="grey"
                 label="Name"
                 placeholder=" "
@@ -44,7 +15,7 @@
             </v-col>
             <v-col cols="12" sm="12" md="12">
               <v-text-field
-                v-model="input.comida"
+                v-model="gusto.comida"
                 color="grey"
                 label="Comida"
                 placeholder=" "
@@ -52,78 +23,144 @@
             </v-col>
             <v-col cols="12" sm="12" md="12">
               <v-text-field
-                v-model="input.bebida"
+                v-model="gusto.bebida"
                 color="grey"
                 label="Bebida"
                 placeholder=" "
               ></v-text-field>
-              <v-btn small @click="mutate()">Guardar </v-btn>
+              <v-btn small @click="update()">Guardar </v-btn>
             </v-col>
           </v-col>
+        </div>
+      </form>
+    </v-card> -->
+    <ApolloMutation
+      :mutation="require('../graphql/updatePerfiles.gql')"
+      :variables="{
+        id: this.$route.params.id,
+        name: perfil.name,
+        comida: perfil.comida,
+        bebida: perfil.bebida,
+        precio: perfil.precio
+      }"
+    >
+      <template slot-scope="{ mutate, loading, error }">
+        <form>
+          <div v-for="gusto in gustos" :key="gusto.id">
+            <v-col cols="4" class="margin-auto">
+              <v-col cols="12" sm="12" md="12">
+                <v-text-field
+                  v-model="perfil.name"
+                  color="grey"
+                  label="Name"
+                  placeholder=" "
+                ></v-text-field>
+              </v-col>
+              <v-col cols="12" sm="12" md="12">
+                <v-text-field
+                  v-model="perfil.comida"
+                  color="grey"
+                  label="Comida"
+                  placeholder=" "
+                ></v-text-field>
+              </v-col>
+              <v-col cols="12" sm="12" md="12">
+                <v-text-field
+                  v-model="perfil.bebida"
+                  color="grey"
+                  label="Bebida"
+                  placeholder=" "
+                ></v-text-field>
+              </v-col>
+              <v-col cols="12" sm="12" md="12">
+                <v-text-field
+                  v-model="perfil.precio"
+                  color="grey"
+                  label="Bebida"
+                  placeholder=" "
+                  v-currency="{ currency: 'MXN', locale: 'en' }"
+                ></v-text-field>
+                <v-btn small @click="mutate()">Guardar </v-btn>
+              </v-col>
+            </v-col>
+          </div>
           <span v-if="error">Failed</span>
           <span class="ml2" v-if="loading">Loading...</span>
         </form>
       </template>
     </ApolloMutation>
+    <!--   <div v-for="gusto in gustos" :key="gusto.id">
+      {{ gusto.comida }}
+    </div> -->
   </div>
 </template>
 <script>
 /* import { gql } from "apollo-boost"; */
 export default {
-  name: "edit",
+  name: "EditarPerfil",
+  props: ["gusto"],
   data() {
     return {
-      input: {
+      gustos: [],
+      perfil: {
         id: null,
         name: "",
         comida: "",
-        bebida: ""
+        bebida: "",
+        precio: ""
       }
     };
   },
-  /*  apollo: {
-    getPerfil: {
-      query: require("../graphql/getPerfil.gql"),
-      variables: {
-        id: this.id
+  apollo: {
+    gustos: {
+      query: require("@/graphql/getPerfil.gql"),
+      variables() {
+        return {
+          id: this.$route.params.id
+        };
       },
-      result({ data }) {
-        this.gustos = data.gustos;
+      result({ data, loading }) {
+        if (!loading) {
+          this.gustos = data.gustos;
+          this.perfil.name = this.gustos[0].perfile.name;
+          this.perfil.comida = this.gustos[0].comida;
+          this.perfil.bebida = this.gustos[0].bebida;
+          this.perfil.precio = this.gustos[0].precio;
+          // eslint-disable-next-line no-console
+        }
       }
     }
-  }, */
+  },
+  watch: {
+    /*   name(gustos) {
+      this.perfil.name = gustos.perfile.name;
+      // eslint-disable-next-line no-console
+      console.log(this.perfil.name);
+    } */
+  },
   mounted() {
-    /*     this.fetch(); */
+    // eslint-disable-next-line no-console
+    console.log(this.perfil.name);
   },
   methods: {
-    /*   fetch() {
-      this.id = this.$route.params.id;
+    updatePE() {
+      /*    this.$apollo.mutate({
+        mutation: require("../graphql/updatePerfiles.gql")
+      }); */
+    }
+    /*  fetch() {
+      this.perfil.id = this.$route.params.id;
       this.$apollo.query({
         query: require("../graphql/getPerfil.gql"),
         variables: {
-          id: this.id
+          id: this.perfil.id
         },
         result({ data }) {
           this.gustos = data.gustos;
         }
       });
-    }, */
-    onDone() {
-      this.$emit("resetForm", true);
-    }
-    /*    update() {
-      this.id = this.$route.params.id;
-      this.name = this.gusto.perfile.name;
-      this.comida = this.gusto.comida;
-      this.bebida = this.gusto.bebida;
-
-      this.$apollo.query({
-        query: require("../graphql/updatePerfiles.gql"),
-        variables: {
-          id: this.id,
-          name: this.name
-        }
-      });
+      // eslint-disable-next-line no-console
+      console.log(this.gustos);
     } */
   }
 };
