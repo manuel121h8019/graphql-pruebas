@@ -1,0 +1,19 @@
+mutation insert_customers($objects: [customers_insert_input!]!) {
+  __typename
+  insert_customers(objects: $objects) {
+    returning {
+      id
+      person {
+        name
+        last_name
+        gender
+        email
+        birthdate
+        person_phones {
+          number
+          country_id
+        }
+      }
+    }
+  }
+}

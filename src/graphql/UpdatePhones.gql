@@ -1,0 +1,12 @@
+mutation MyMutation2(
+  $person_id: uuid
+  $person_phones: person_phones_set_input
+) {
+  __typename
+  update_person_phones(
+    where: { person: { id: { _eq: $person_id } } }
+    _set: $person_phones
+  ) {
+    affected_rows
+  }
+}

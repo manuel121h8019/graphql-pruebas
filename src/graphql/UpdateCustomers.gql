@@ -1,0 +1,30 @@
+mutation UpdateCustomers(
+  $id: uuid
+  $name: String
+  $last_name: String
+  $email: String
+  $gender: bpchar
+  $birthdate: timestamp
+  $address: String
+  $description: String
+) {
+  __typename
+  update_people(
+    where: { id: { _eq: $id } }
+    _set: {
+      name: $name
+      last_name: $last_name
+      email: $email
+      gender: $gender
+      birthdate: $birthdate
+    }
+  ) {
+    affected_rows
+  }
+  update_customers(
+    where: { person: { id: { _eq: $id } } }
+    _set: { address: $address, description: $description }
+  ) {
+    affected_rows
+  }
+}

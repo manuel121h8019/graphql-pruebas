@@ -1,0 +1,22 @@
+query GetCustomers($person_id: uuid) {
+  __typename
+  customers(where: { person: { id: { _eq: $person_id } } }) {
+    id
+    person {
+      id
+      name
+      last_name
+      gender
+      email
+      birthdate
+      person_phones {
+        id
+        number
+        person_id
+        country_id
+      }
+    }
+    description
+    address
+  }
+}

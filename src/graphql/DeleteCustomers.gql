@@ -1,0 +1,6 @@
+mutation DeleteCustomers($id:uuid) {
+  __typename
+  delete_customers(where: { id: { _eq: $id} }) {
+    affected_rows
+  }
+}

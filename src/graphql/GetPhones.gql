@@ -1,0 +1,9 @@
+query MyQuery($id:uuid) {
+  __typename
+  person_phones(where: { person: { id: { _eq: $id } } }) {
+    number
+    id
+    country_id
+    person_id
+  }
+}
