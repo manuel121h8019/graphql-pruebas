@@ -1,0 +1,10 @@
+mutation DeletePhone($id: uuid) {
+  __typename
+  delete_person_phones(where: { id: { _eq: $id } }) {
+    returning {
+      country_id
+      number
+      id
+    }
+  }
+}

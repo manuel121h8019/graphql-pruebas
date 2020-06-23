@@ -1,9 +1,10 @@
-query MyQuery($id:uuid) {
-  __typename
-  person_phones(where: { person: { id: { _eq: $id } } }) {
+query GetPhones($person_id: uuid) {
+  person_phones(
+    where: { person: { id: { _eq: $person_id } } }
+    order_by: { created_at: asc }
+  ) {
     number
     id
     country_id
-    person_id
   }
 }

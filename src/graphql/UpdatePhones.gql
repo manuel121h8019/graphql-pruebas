@@ -1,12 +1,19 @@
-mutation MyMutation2(
+mutation MyMutation(
   $person_id: uuid
-  $person_phones: person_phones_set_input
+  $number: String
+  $country: bigint
+  $id: uuid
 ) {
   __typename
   update_person_phones(
-    where: { person: { id: { _eq: $person_id } } }
-    _set: $person_phones
+    _set: { number: $number, country_id: $country }
+    where: { id: { _eq: $id } }
   ) {
     affected_rows
+    returning {
+      number
+      id
+      country_id
+    }
   }
 }

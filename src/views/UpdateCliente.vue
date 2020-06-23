@@ -2,11 +2,6 @@
   <div>
     <v-app>
       <v-container>
-        <!--      <ApolloMutation
-          :mutation="require('@/graphql/InsertCliente.gql')"
-          :variables="{}"
-        >
-          <template v-slot="{ mutate, loading, error }"> -->
         <form>
           <v-col clos="12">
             <v-card flat="">
@@ -32,9 +27,10 @@
                   ></v-text-field>
                 </v-col>
                 <v-col cols="12" sm="12" md="12">
-                  <v-row>
+                  <v-row v-for="phone in phones" :key="phone.id">
                     <v-col cols="4">
                       <v-autocomplete
+                        v-model="phone.country_id"
                         :items="countries"
                         item-text="nicename"
                         item-value="id"
@@ -44,8 +40,9 @@
                         style="padding-top: 0px;margin-top: 1px;"
                       ></v-autocomplete>
                     </v-col>
-                    <v-col cols="5">
+                    <v-col cols="4">
                       <v-text-field
+                        v-model="phone.number"
                         value=""
                         color="grey"
                         label="Teléfono"
@@ -53,34 +50,123 @@
                         style="padding-top: 0px;margin-top: 1px;"
                       ></v-text-field
                     ></v-col>
-                    <v-btn
-                      small
-                      class="white--text"
-                      elevation="0"
-                      color="light-blue "
-                      @click="updatePhone(phone.person_id)"
-                      style="padding-top: 0px;margin-top: 1px;"
-                      >edit</v-btn
-                    >
                   </v-row>
-                  <v-col cols="12">
+                  <span class="3">
                     <v-btn
-                      small
-                      class="white--text"
+                      x-small
                       elevation="0"
-                      color="light-blue "
-                      @click="newPhone"
-                      >Add Num.</v-btn
-                    >
-                    <v-btn
-                      small
-                      class="white--text"
-                      elevation="0"
-                      color="red darken-1 ml-3"
-                      @click="deletePhone"
-                      >Borrar
+                      color="green"
+                      dark
+                      @click="nuevoTelefono()"
+                      ><v-icon dark x-small>fas fa-plus-square</v-icon>
                     </v-btn>
-                  </v-col>
+                  </span>
+                  <!--      <v-row v-if="phones.length >= 2">
+                    <v-col cols="4">
+                      <v-autocomplete
+                        v-model="person_phones.country_id2"
+                        :items="countries"
+                        item-text="nicename"
+                        item-value="id"
+                        label="Prefijo"
+                        placeholder=" "
+                        color="grey"
+                        style="padding-top: 0px;margin-top: 1px;"
+                        :disabled="!editPhone2"
+                      ></v-autocomplete>
+                    </v-col>
+                    <v-col cols="4">
+                      <v-text-field
+                        v-model="person_phones.number2"
+                        value=""
+                        color="grey"
+                        label="Teléfono"
+                        placeholder="  "
+                        style="padding-top: 0px;margin-top: 1px;"
+                        :disabled="!editPhone2"
+                      ></v-text-field
+                    ></v-col>
+                    <v-col cols="4">
+                      <span class="pr-3">
+                        <v-btn
+                          v-if="editPhone2 === false"
+                          x-small
+                          elevation="0"
+                          color="blue"
+                          dark
+                          @click="editPhone2 = true"
+                          ><v-icon dark x-small>fas fa-edit</v-icon>
+                        </v-btn>
+                        <v-btn
+                          v-if="editPhone2 === true"
+                          x-small
+                          elevation="0"
+                          color="green"
+                          dark
+                          @click="updatePhone2"
+                          ><v-icon dark x-small>fas fa-save</v-icon>
+                        </v-btn>
+                      </span>
+                      <span class="pr-3">
+                        <v-btn
+                          v-if="editPhone2 === false"
+                          x-small
+                          elevation="0"
+                          color="red"
+                          dark
+                          @click="deletePhone()"
+                          ><v-icon dark x-small>fas fa-trash</v-icon>
+                        </v-btn>
+                        <v-btn
+                          v-if="editPhone2 === true"
+                          x-small
+                          elevation="0"
+                          color="red"
+                          dark
+                          @click="editPhone2 = false"
+                          ><v-icon dark x-small>fas fa-window-close</v-icon>
+                        </v-btn>
+                      </span>
+                    </v-col>
+                  </v-row>
+                  <v-row v-if="newPhone === true">
+                    <v-col cols="4">
+                      <v-autocomplete
+                        v-model="person_phones.newCountry"
+                        :items="countries"
+                        item-text="nicename"
+                        item-value="id"
+                        label="Prefijo"
+                        placeholder=" "
+                        color="grey"
+                        style="padding-top: 0px;margin-top: 1px;"
+                        :disabled="disabled === true"
+                      ></v-autocomplete>
+                    </v-col>
+                    <v-col cols="4">
+                      <v-text-field
+                        v-model="person_phones.newNumber"
+                        value=""
+                        color="grey"
+                        label="Teléfono"
+                        placeholder="  "
+                        style="padding-top: 0px;margin-top: 1px;"
+                        :disabled="disabled === true"
+                      ></v-text-field
+                    ></v-col>
+                    <v-col cols="4">
+                      <span class="4">
+                        <v-btn
+                          x-small
+                          elevation="0"
+                          color="green"
+                          dark
+                          @click="nuevoTelefono()"
+                          ><v-icon dark x-small>fas fa-save</v-icon>
+                        </v-btn>
+                      </span>
+                    </v-col>
+                  </v-row> -->
                 </v-col>
                 <v-col cols="12" sm="12" md="12">
                   <v-text-field
@@ -169,9 +255,6 @@
             </v-card>
           </v-col>
         </form>
-        <!--          <p v-if="error">An error occurred: {{ error }}</p>
-          </template>
-        </ApolloMutation> -->
       </v-container>
     </v-app>
   </div>
@@ -185,6 +268,10 @@ export default {
     menu: false,
     modal: false,
     menu2: false,
+    editPhone1: false,
+    editPhone2: false,
+    disabled: false,
+    newPhone: false,
     id: null,
     client: {
       name: "",
@@ -194,7 +281,18 @@ export default {
       birthdate: new Date().toISOString().substr(0, 10),
       description: "",
       address: ""
-    }
+    },
+    person_phones: {
+      idPhone1: "",
+      number1: "",
+      country_id1: "",
+      idPhone2: "",
+      number2: "",
+      country_id2: "",
+      newNumber: "",
+      newCountry: ""
+    },
+    phones: []
 
     /*   person_phones: {
       data: [
@@ -209,18 +307,30 @@ export default {
     countries: {
       query: require("../graphql/GetCountries.gql")
     },
-    /*  person_phones: {
+    person_phones: {
       query: require("../graphql/GetPhones.gql"),
       variables() {
         return {
-          id: this.$route.params.id
+          person_id: this.$route.params.id
         };
       },
       result({ data }) {
-        this.person_phones.data = data.person_phones;
-        this.person.name.data = data.person.data.name;
+        this.phones = data.person_phones;
+        if (data.person_phones.length >= 2) {
+          this.person_phones.idPhone1 = data.person_phones[0].id;
+          this.person_phones.number1 = data.person_phones[0].number;
+          this.person_phones.country_id1 = data.person_phones[0].country_id;
+
+          this.person_phones.idPhone2 = data.person_phones[1].id;
+          this.person_phones.number2 = data.person_phones[1].number;
+          this.person_phones.country_id2 = data.person_phones[1].country_id;
+        } else {
+          this.person_phones.idPhone1 = data.person_phones[0].id;
+          this.person_phones.number1 = data.person_phones[0].number;
+          this.person_phones.country_id1 = data.person_phones[0].country_id;
+        }
       }
-    }, */
+    },
     customers: {
       query: require("../graphql/GetCustomers.gql"),
       variables() {
@@ -229,6 +339,9 @@ export default {
         };
       },
       result({ data }) {
+        /*  this.phones = data.customers[0].person.person_phones;
+        // eslint-disable-next-line no-console
+        console.log(this.phones); */
         this.client.name = data.customers[0].person.name;
         this.client.last_name = data.customers[0].person.last_name;
         this.client.email = data.customers[0].person.email;
@@ -236,6 +349,7 @@ export default {
         this.client.birthdate = data.customers[0].person.birthdate;
         this.client.address = data.customers[0].address;
         this.client.description = data.customers[0].description;
+        this.phones = data.customers[0].person.person_phones;
       }
     }
   },
@@ -251,39 +365,102 @@ export default {
   methods: {
     save() {
       /**/
-      this.$apollo.mutate({
-        mutation: require("../graphql/UpdateCustomers.gql"),
-        variables: {
-          id: this.$route.params.id,
-          name: this.client.name,
-          last_name: this.client.last_name,
-          email: this.client.email,
-          gender: this.client.gender,
-          birthdate: this.client.birthdate,
-          address: this.client.address,
-          description: this.client.description
-        }
-      });
+      this.$apollo
+        .mutate({
+          mutation: require("../graphql/UpdateCustomers.gql"),
+          variables: {
+            id: this.$route.params.id,
+            name: this.client.name,
+            last_name: this.client.last_name,
+            email: this.client.email,
+            gender: this.client.gender,
+            birthdate: this.client.birthdate,
+            address: this.client.address,
+            description: this.client.description
+          }
+        })
+        .then(() => {
+          this.phonesVerifi();
+        });
     },
-    newPhone() {
-      this.client.person.data.person_phones.data.push({
-        /*   person_id: this.id, */
+    nuevoTelefono() {
+      this.phones.push({
+        id: "",
         number: "",
         country_id: 145
       });
+      /*  this.$apollo.mutate({
+        mutation: require("../graphql/InsertPhone.gql"),
+        variables: {
+          person_id: this.$route.params.id,
+          number: this.person_phones.newNumber,
+          country: this.person_phones.newCountry
+        }
+      });
+      this.disabled = true;
+      this.newPhone = false;
+      this.$apollo.queries.customers.refetch();
+      this.$apollo.queries.person_phones.refetch(); */
     },
-    deletePhone(phone) {
-      this.client.person.data.person_phones.data.splice(
-        this.client.person.data.person_phones.data.indexOf(phone),
-        1
-      );
+    deletePhone() {
+      this.$apollo.mutate({
+        mutation: require("../graphql/DeletePhone.gql"),
+        variables: {
+          id: this.person_phones.idPhone2
+        }
+      });
+      this.$apollo.queries.customers.refetch();
+      this.$apollo.queries.person_phones.refetch();
     },
-    updatePhone(id) {
+    updatePhone1() {
       this.$apollo.mutate({
         mutation: require("../graphql/UpdatePhones.gql"),
         variables: {
-          person_id: id,
-          person_phones: this.person_phones
+          id: this.person_phones.idPhone1,
+          person_id: this.$route.params.id,
+          number: this.person_phones.number1,
+          country: this.person_phones.country_id1
+        }
+      });
+    },
+    updatePhone2() {
+      this.$apollo.mutate({
+        mutation: require("../graphql/UpdatePhones.gql"),
+        variables: {
+          id: this.person_phones.idPhone2,
+          person_id: this.$route.params.id,
+          number: this.person_phones.number2,
+          country: this.person_phones.country_id2
+        }
+      });
+    },
+    phonesVerifi() {
+      this.phones.forEach(phone => {
+        if (phone.id != "") {
+          this.$apollo.mutate({
+            mutation: require("../graphql/UpdatePhones.gql"),
+            variables: {
+              id: phone.id,
+              person_id: this.$route.params.id,
+              number: phone.number,
+              country: phone.country_id
+            }
+          });
+          // eslint-disable-next-line no-console
+          console.log("udate", phone.id);
+        } else {
+          // eslint-disable-next-line no-console
+          console.log("insertar", phone.id);
+          this.$apollo.mutate({
+            mutation: require("../graphql/InsertPhone.gql"),
+            variables: {
+              person_id: this.$route.params.id,
+              number: phone.number,
+              country: phone.country_id
+            }
+          });
+          this.$apollo.queries.customers.refetch();
+          this.$apollo.queries.person_phones.refetch(); /**/
         }
       });
     }

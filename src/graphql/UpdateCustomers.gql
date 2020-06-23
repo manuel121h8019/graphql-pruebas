@@ -7,6 +7,8 @@ mutation UpdateCustomers(
   $birthdate: timestamp
   $address: String
   $description: String
+  $number: String
+  $country: bigint
 ) {
   __typename
   update_people(
@@ -26,5 +28,16 @@ mutation UpdateCustomers(
     _set: { address: $address, description: $description }
   ) {
     affected_rows
+  }
+  update_person_phones(
+    _set: { number: $number, country_id: $country }
+    where: { id: { _eq: $id } }
+  ) {
+    affected_rows
+    returning {
+      number
+      id
+      country_id
+    }
   }
 }

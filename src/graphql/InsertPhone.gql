@@ -1,12 +1,9 @@
-mutation InsertPhone($objects:[person_phones_insert_input!]!) {
-  __typename
-insert_person_phones(objects: $objects, on_conflict: {constraint: person_phones_pkey, update_columns: id}){
+mutation MyMutation2($number: String, $country: bigint, $person_id:uuid) {
+  insert_person_phones(objects: { number: $number, country_id: $country, person_id:$person_id }) {
     returning {
-      id
       number
-      person_id
       country_id
+      id
     }
-    affected_rows
   }
 }
